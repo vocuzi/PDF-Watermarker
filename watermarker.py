@@ -5,65 +5,29 @@ from PyPDF2 import PdfFileWriter, PdfFileReader
 
 def get_pdf_list():
     r = []
-    l = []
-    for (dirpath, dirnames, filenames) in walk("./left-watermarker"):
-        l.extend(filenames)
-        break
-
-    for (dirpath, dirnames, filenames) in walk("./right-watermarker"):
+    for (dirpath, dirnames, filenames) in walk("./input"):
         r.extend(filenames)
         break
-    return r, l
+    return r
 
 
 canvas_width = 566
 
 # Create the watermark from an image
-c = canvas.Canvas('bin/right-watermark.pdf')
-c.drawImage('bin/logo.png', canvas_width - 4, 2, width=30, height=30,
+c = canvas.Canvas('bin/sample-watermark.pdf')
+c.drawImage('bin/logo.png', canvas_width - 500, 100, width=500, height=500,
             mask='auto', preserveAspectRatio=True)
-c.drawString(canvas_width - 73, 12, "SNEEDS.IR")
+c.drawString(canvas_width - 500, 12, "Downloaded from https://diplomate.greybits.in/")
 c.save()
 
-c = canvas.Canvas('bin/left-watermark.pdf')
-c.drawImage('bin/logo.png', 2, 2, width=30, height=30, mask='auto')
-c.drawString(37, 12, "SNEEDS.IR")
-c.save()
 
-right_pdf_list, left_pdf_list = get_pdf_list()
+right_pdf_list = get_pdf_list()
 
-# Solving mac problem
-if right_pdf_list[0] == ".DS_Store":
-    del (right_pdf_list[0])
-
-if left_pdf_list[0] == ".DS_Store":
-    del (left_pdf_list[0])
-
-print("\nLEFT PDFs : ")
+print("\nRIGHT PDFs : ")
 for booklet_name in right_pdf_list:
-    watermark = PdfFileReader(open("bin/right-watermark.pdf", "rb"))
+    watermark = PdfFileReader(open("bin/sample-watermark.pdf", "rb"))
     output_file = PdfFileWriter()
-    input_file = PdfFileReader(open("right-watermarker/" + booklet_name, "rb"))
-
-    page_count = input_file.getNumPages()
-
-    # Go through all the left-watermarker file pages to add a watermark to them
-    for page_number in range(page_count):
-        print(booklet_name + ": Watermarking page {} of {}".format(page_number, page_count - 1))
-
-        input_page = input_file.getPage(page_number)
-        input_page.mergePage(watermark.getPage(0))
-
-        output_file.addPage(input_page)
-
-    with open("output/" + booklet_name, "wb") as outputStream:
-        output_file.write(outputStream)
-
-print("\nLEFT PDFs : ")
-for booklet_name in left_pdf_list:
-    watermark = PdfFileReader(open("bin/left-watermark.pdf", "rb"))
-    output_file = PdfFileWriter()
-    input_file = PdfFileReader(open("left-watermarker/" + booklet_name, "rb"))
+    input_file = PdfFileReader(open("input/" + booklet_name, "rb"))
 
     page_count = input_file.getNumPages()
 
