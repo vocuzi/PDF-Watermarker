@@ -5,7 +5,10 @@ This program takes the pdfs in input folder and then watermark them with provide
 This program watermark PDFs with Image and Text. 
 
 ## How to use: 
-1) Clone the repository and make sure you have `PyPDF2` and `reportlab` installed. If not, install with `pip install PyPDF2 reportlab`. 
+1) Clone the repository and make sure you have `PyPDF2` and `reportlab` installed. If not, install with 
+```
+pip install PyPDF2 reportlab`. 
+```
 2) Place your logo in `./bin` directory with name "logo.png". 
 3) Put the PDFs that you wish to watermark in `./input` folder. If folder doesn't already exists, create it manually before running the script. 
 4) Run the program with following command in the program directory:  
