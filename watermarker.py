@@ -1,3 +1,4 @@
+import os
 from os import walk
 from reportlab.pdfgen import canvas
 from PyPDF2 import PdfFileWriter, PdfFileReader
@@ -32,7 +33,6 @@ right_pdf_list = get_pdf_list()
 print("\nRIGHT PDFs : ")
 for booklet_name in right_pdf_list:
     watermark = PdfFileReader(open("bin/sample-watermark.pdf", "rb"))
-    large_watermark = PdfFileReader(open("bin/sample-watermark--large.pdf", "rb"))
     output_file = PdfFileWriter()
     input_file = PdfFileReader(open("input/" + booklet_name, "rb"))
     page_count = input_file.getNumPages()
@@ -53,6 +53,7 @@ for booklet_name in right_pdf_list:
         # 	input_page.mergePage(watermark.getPage(0))
         input_page.mergePage(watermark.getPage(0))
         output_file.addPage(input_page)
-
+    if not os.path.exists("output"):
+        os.mkdir("output")
     with open("output/" + booklet_name, "wb") as outputStream:
         output_file.write(outputStream)
